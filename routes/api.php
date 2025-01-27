@@ -24,15 +24,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Public Routes
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/forgot-password', [PasswordResetController::class, 'forgot_password']);
-Route::post('/reset-password', [PasswordResetController::class, 'reset_password']);
+// Public Routes (CORS Middleware applied globally or on specific routes)
+Route::middleware(['cors'])->group(function () {
+    Route::post('/register', [RegisterController::class, 'register'])->name('register');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/forgot-password', [PasswordResetController::class, 'forgot_password']);
+    Route::post('/reset-password', [PasswordResetController::class, 'reset_password']);
+});
 
-// Logged in users only
-Route::middleware('auth:sanctum')->group(function () {
-
+// Logged-in users only
+Route::middleware(['auth:sanctum', 'cors'])->group(function () {
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
     Route::post('/send-code', [TokenVerificationController::class, 'send_code'])->middleware('throttle:5,10');
     Route::post('/verify-code', [TokenVerificationController::class, 'verify_code'])->middleware('throttle:10,5');

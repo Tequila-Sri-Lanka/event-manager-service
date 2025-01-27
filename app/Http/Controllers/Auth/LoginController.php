@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
     public function login(LoginRequest $request)
     {
+        Log::info('Login attempt', $request->only('email'));
         $credentials = $request->only(['email', 'password']);
 
         // Try to login
