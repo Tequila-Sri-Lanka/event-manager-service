@@ -11,7 +11,6 @@ class LoginController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        Log::info('Login attempt', $request->only('email'));
         $credentials = $request->only(['email', 'password']);
 
         // Try to login
